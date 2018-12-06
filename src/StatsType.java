@@ -2,8 +2,8 @@
  * Limits available StatsTypes
  * 
  * @author Elijah Boulton
- * @version 2018-12-05
- * Project 3
+ * @version 2018-12-06
+ * Project 4
  */
 
 /**

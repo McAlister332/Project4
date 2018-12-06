@@ -6,8 +6,8 @@ import java.util.GregorianCalendar;
  * methods to compare time stamps on statistics.
  * 
  * @author Elijah Boulton
- * @version 2018-12-05
- * Project 3
+ * @version 2018-12-06
+ * Project 4
  */
 
 public class Statistics extends Observation implements DateTimeComparable

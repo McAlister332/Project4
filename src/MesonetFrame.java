@@ -1,11 +1,13 @@
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -23,23 +25,46 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+/**
+ * An extended Jframe that uses methods to organize all its components.
+ * 
+ * @author Elijah Boulton
+ * @version 2018-12-06
+ * Project 4
+ */
+
 public class MesonetFrame extends JFrame
 {
-   
+   /** Serial Version UID. */
    private static final long serialVersionUID = 1L;
    
+   /** Menu bar for the window. */
    JMenuBar menuBar = new JMenuBar();
+   /** Menu list for the window. */
    JMenu fileMenu = new JMenu("File");
+   /** Menu item for the window, chooses a file. */
    JMenuItem choosefile = new JMenuItem();
+   /** Menu item for the window, exits the program. */
    JMenuItem exitprog = new JMenuItem();
    
+   /** First panel for the window. */
    JPanel textPanel = new JPanel();
+   /** Second panel for the window. */
    JPanel paramPanel = new JPanel();
+   /** Third panel for the window. */
    JPanel statsPanel = new JPanel();
+   /** Fourth panel for the window. */
    JPanel outPanel = new JPanel();
+   /** Fifth panel for the window. */
    JPanel buttonPanel = new JPanel();
    
+   /** JLabel containing a message to the user. */
    JLabel messageArea = new JLabel();
+   
+   /*
+    * I'm not going to javadoc all of these. It's all the check boxes for
+    * every data type.
+    */
    
    JCheckBox stnm = new JCheckBox();
    JCheckBox time = new JCheckBox();
@@ -65,22 +90,36 @@ public class MesonetFrame extends JFrame
    JCheckBox tr25 = new JCheckBox();
    JCheckBox tr60 = new JCheckBox();
    
+   /** Radio button for calculation of MAXIMUM statistics. */
    JRadioButton MAXIMUM = new JRadioButton("MAXIMUM");
+   /** Radio button for calculation of MINIMUM statistics. */
    JRadioButton MINIMUM = new JRadioButton("MINIMUM");
+   /** Radio button for calculation of AVERAGE statistics. */
    JRadioButton AVERAGE = new JRadioButton("AVERAGE");
+   /** Radio button for calculation of TOTAL statistics. */
    JRadioButton TOTAL = new JRadioButton("TOTAL");
    
+   /** The file to be read is initialized as a specific file from data. */
    File file = new File("201808301745.mdf");
    
+   /** Column headers for the JTable. */
    final String[] headers = {"Station", "Parameter", "Statistic", "Value", "Reporting Stations", "Date"};
+   /** Maximum rows in the JTable. */
    int numRows = 92 ;
+   /** JTable for representing data to the user. */
    JTable output;
-   
+   /** ScrollPane for eash navigation fo the data. */
    JScrollPane scrollPanel;
    
+   /** Button that calculates the data. */
    JButton calc = new JButton("Calculate");
+   /** A button that exits the program. */
    JButton exit = new JButton("Exit");
    
+   /**
+    * Constructor sets up the JFrame and calls 6 handwritten methods for allocating
+    * the components of the JFrame.
+    */
    public MesonetFrame()
    {
       super("Mesonet WeatherStatistics Calculator");
@@ -88,8 +127,6 @@ public class MesonetFrame extends JFrame
       this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       this.setSize(1500, 750);
       this.setResizable(false);
-      
-      
       
       this.formatMenuBar();
       this.formatTextPanel();
@@ -101,6 +138,9 @@ public class MesonetFrame extends JFrame
       this.setVisible(true);
    }
    
+   /**
+    * Formats the Menu Bar.
+    */
    public void formatMenuBar()
    {
       choosefile.setText("Choose Data File");
@@ -115,6 +155,9 @@ public class MesonetFrame extends JFrame
       this.setJMenuBar(menuBar);
    }
    
+   /**
+    * Formats the Welcome Text Panel.
+    */
    public void formatTextPanel()
    {
       messageArea.setText("Mesonet - We don't set records, we report them!");
@@ -126,6 +169,10 @@ public class MesonetFrame extends JFrame
       this.add(textPanel);
    }
    
+   /**
+    * Formats the panel that lists parameters in check boxes, and calls a method
+    * to format the check boxes.
+    */
    public void formatParamPanel()
    {
       paramPanel.setLocation(0, 50);
@@ -166,6 +213,9 @@ public class MesonetFrame extends JFrame
       
    }
    
+   /**
+    * Formats the panel that holds statistic types and formats radio buttons.
+    */
    public void formatStatsPanel()
    {
       statsPanel.setLocation(200, 50);
@@ -184,6 +234,9 @@ public class MesonetFrame extends JFrame
       
    }
    
+   /**
+    * Formats a panel that holds the output JTable, calls a method to format the JTable.
+    */
    public void formatOutPanel()
    {
       outPanel.setLocation(450, 100);
@@ -201,6 +254,10 @@ public class MesonetFrame extends JFrame
       
    }
    
+   /**
+    * Formats a panel that contains two buttons, and calls a method to format
+    * the buttons.
+    */
    public void formatButtonPanel()
    {
       buttonPanel.setLocation(750, 600);
@@ -216,6 +273,9 @@ public class MesonetFrame extends JFrame
       
    }
    
+   /**
+    * Formats the 23 check boxes that represent data types.
+    */
    public void formatCheckBoxes()
    {
       tair.setSelected(true);
@@ -247,6 +307,9 @@ public class MesonetFrame extends JFrame
       tr60.setText("TR60");
    }
    
+   /**
+    * Formats the JTable and sets it up for holding data.
+    */
    public void formatOutputArea()
    {
       DefaultTableModel blank = new DefaultTableModel(numRows, headers.length);
@@ -268,6 +331,9 @@ public class MesonetFrame extends JFrame
       
    }
    
+   /**
+    * Formats the two buttons that calculate statistics and close the program.
+    */
    public void formatButtons()
    {
       calc.setSize(100, 30);
@@ -278,6 +344,12 @@ public class MesonetFrame extends JFrame
       exit.addActionListener(new ExitActionListener());
    }
    
+   /**
+    * Action Listener that uses a JFileChooser to select files from the data directory.
+    * 
+    * @author Eli
+    *
+    */
    private class FileActionListener implements ActionListener
    {
       public void actionPerformed(ActionEvent e)
@@ -291,6 +363,12 @@ public class MesonetFrame extends JFrame
       }
    }
    
+   /**
+    * Action Listener that closes the program.
+    * 
+    * @author Eli
+    *
+    */
    private class ExitActionListener implements ActionListener
    {
       public void actionPerformed(ActionEvent e)
@@ -299,6 +377,15 @@ public class MesonetFrame extends JFrame
       }
    }
    
+   /**
+    * Action Listener that creates an instance of the MapData class to calculate
+    * and organize all of the weather statistics from file. After sorting the selected
+    * data types and statistic types into lists, it searches the EnumMap statistics
+    * in MapData data for the information that the user wants.
+    * 
+    * @author Eli
+    *
+    */
    private class CalcActionListener implements ActionListener
    {
       public void actionPerformed(ActionEvent e)
@@ -331,6 +418,7 @@ public class MesonetFrame extends JFrame
          ArrayList<String> paramTypes = new ArrayList<String>();
          ArrayList<StatsType> statTypes = new ArrayList<StatsType>();
          
+         // Check for which boxes are checked.
          if(stnm.isSelected())
             paramTypes.add("STNM");
          if(time.isSelected())
@@ -378,7 +466,7 @@ public class MesonetFrame extends JFrame
          if(tr60.isSelected())
             paramTypes.add("TR60");
             
-
+         // Check which buttons are pushed.
          if(MAXIMUM.isSelected())
             statTypes.add(StatsType.MAXIMUM);
          if(MINIMUM.isSelected())
@@ -387,8 +475,6 @@ public class MesonetFrame extends JFrame
             statTypes.add(StatsType.AVERAGE);
          if(TOTAL.isSelected())
             statTypes.add(StatsType.TOTAL);
-         
-         //System.out.println(data.getStatistics(StatsType.MAXIMUM, "TA9M").toString());
          
          int cntr = 0;
          for(StatsType t: statTypes)

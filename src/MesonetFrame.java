@@ -34,14 +34,15 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 
 public class MesonetFrame extends JFrame
 {
    JMenuBar menuBar = new JMenuBar();
    JMenu fileMenu = new JMenu("File");
-   JMenuItem file1 = new JMenuItem();
-   JMenuItem file2 = new JMenuItem();
+   JMenuItem choosefile = new JMenuItem();
+   JMenuItem exitprog = new JMenuItem();
    
    JPanel textPanel = new JPanel();
    JPanel paramPanel = new JPanel();
@@ -80,7 +81,9 @@ public class MesonetFrame extends JFrame
    JRadioButton AVERAGE = new JRadioButton("AVERAGE");
    JRadioButton TOTAL = new JRadioButton("TOTAL");
    
+   File file = null;
    JTextArea output = new JTextArea();
+   JScrollPane scroll = new JScrollPane(output);
    
    JButton calc = new JButton("Calculate");
    JButton exit = new JButton("Exit");
@@ -95,12 +98,11 @@ public class MesonetFrame extends JFrame
       
       
       
-      
-      
       this.formatMenuBar();
       this.formatTextPanel();
       this.formatParamPanel();
       this.formatStatsPanel();
+      this.formatOutPanel();
       this.formatButtonPanel();
       
       this.setVisible(true);
@@ -108,10 +110,14 @@ public class MesonetFrame extends JFrame
    
    public void formatMenuBar()
    {
-      file1.setText("201808010700.mdf");
-      file2.setText("201808301745.mdf");
-      fileMenu.add(file1);
-      fileMenu.add(file2);
+      choosefile.setText("Choose Data File");
+      exitprog.setText("Exit");
+      
+      choosefile.addActionListener(new FileActionListener());
+      exitprog.addActionListener(new ExitActionListener());
+      
+      fileMenu.add(choosefile);
+      fileMenu.add(exitprog);
       menuBar.add(fileMenu);
       this.setJMenuBar(menuBar);
    }
@@ -119,8 +125,8 @@ public class MesonetFrame extends JFrame
    public void formatTextPanel()
    {
       messageArea.setText("Mesonet - We don't set records, we report them!");
-      textPanel.setLocation(500, 0);
-      textPanel.setSize(500, 50);
+      textPanel.setLocation(800, 0);
+      textPanel.setSize(400, 50);
       
       textPanel.setLayout(new GridLayout(1, 1));
       textPanel.add(messageArea);
@@ -130,9 +136,9 @@ public class MesonetFrame extends JFrame
    public void formatParamPanel()
    {
       paramPanel.setLocation(0, 50);
-      paramPanel.setSize(150, 625);
-      paramPanel.setLayout(new GridLayout(20, 2));
-      paramPanel.setBorder(new EtchedBorder());
+      paramPanel.setSize(100, 625);
+      paramPanel.setLayout(new GridLayout(23, 0));
+      paramPanel.setBorder(new TitledBorder(new EtchedBorder(), "Data Type"));
       
       
       formatCheckBoxes();
@@ -170,11 +176,11 @@ public class MesonetFrame extends JFrame
    public void formatStatsPanel()
    {
       statsPanel.setLocation(200, 50);
-      statsPanel.setSize(200, 625);
+      statsPanel.setSize(100, 625);
       statsPanel.setLayout(new GridLayout(4, 1));
-      statsPanel.setBorder(new EtchedBorder());
+      statsPanel.setBorder(new TitledBorder(new EtchedBorder(), "Statistic Type"));
       
-      formatRadioButtons();
+      MAXIMUM.setSelected(true);
       statsPanel.add(MAXIMUM);
       statsPanel.add(MINIMUM);
       statsPanel.add(AVERAGE);
@@ -185,12 +191,29 @@ public class MesonetFrame extends JFrame
       
    }
    
+   public void formatOutPanel()
+   {
+      outPanel.setLocation(450, 100);
+      outPanel.setSize(1000, 450);
+      outPanel.setBorder(new TitledBorder(new EtchedBorder(), "Station                                  Parameter                 "
+                              + "                 Statistic                                  Value                                  "
+                              + "Reporting Stations                                  Date"));
+      
+      formatOutputArea();
+      outPanel.add(output);
+      
+      outPanel.setVisible(true);
+      this.add(outPanel);
+      
+   }
+   
    public void formatButtonPanel()
    {
-      buttonPanel.setLocation(500, 550);
+      buttonPanel.setLocation(750, 600);
       buttonPanel.setSize(500, 100);
-      buttonPanel.setLayout(new GridLayout(1, 0));
+      buttonPanel.setLayout(null);
       
+      formatButtons();
       buttonPanel.add(calc);
       buttonPanel.add(exit);
       
@@ -199,13 +222,12 @@ public class MesonetFrame extends JFrame
       
    }
    
-   public void formatRadioButtons()
-   {
-      
-   }
-   
    public void formatCheckBoxes()
    {
+      tair.setSelected(true);
+      ta9m.setSelected(true);
+      srad.setSelected(true);
+      
       stnm.setText("STNM");
       time.setText("TIME");
       relh.setText("RELH");
@@ -231,4 +253,54 @@ public class MesonetFrame extends JFrame
       tr60.setText("TR60");
    }
    
+   public void formatOutputArea()
+   {
+      output.setSize(950, 450);
+      output.setLineWrap(true);
+      output.setWrapStyleWord(true);
+      output.setVisible(true);
+     
+   }
+   
+   public void formatButtons()
+   {
+      calc.setSize(100, 30);
+      calc.setLocation(50, 25);
+      calc.addActionListener(new CalcActionListener());
+      exit.setSize(75, 30);
+      exit.setLocation(325,25 );
+      exit.addActionListener(new ExitActionListener());
+   }
+   
+   private class FileActionListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent e)
+      {
+         JFileChooser chooser = new JFileChooser("data");
+         int returnVal = chooser.showOpenDialog(outPanel);
+         if (returnVal ==JFileChooser.APPROVE_OPTION)
+         {
+            file = chooser.getSelectedFile();
+         }
+      }
+   }
+   
+   private class ExitActionListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent e)
+      {
+         System.exit(0);
+      }
+   }
+   
+   private class CalcActionListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent e)
+      {
+      
+      }
+   }
+   
 }
+
+

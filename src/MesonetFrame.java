@@ -82,8 +82,10 @@ public class MesonetFrame extends JFrame
    JRadioButton TOTAL = new JRadioButton("TOTAL");
    
    File file = null;
-   JTextArea output = new JTextArea();
-   JScrollPane scroll = new JScrollPane(output);
+   final String[] headers = {"Station", "Parameter", "Statistic", "Value", "Reporting Stations", "Date"};
+   final String[][] initdata = {{"123", "234", "123", "123", "123", "123"}};
+   JTable output = new JTable(initdata, headers);
+   JScrollPane scrollPane = new JScrollPane(output);
    
    JButton calc = new JButton("Calculate");
    JButton exit = new JButton("Exit");
@@ -195,12 +197,11 @@ public class MesonetFrame extends JFrame
    {
       outPanel.setLocation(450, 100);
       outPanel.setSize(1000, 450);
-      outPanel.setBorder(new TitledBorder(new EtchedBorder(), "Station                                  Parameter                 "
-                              + "                 Statistic                                  Value                                  "
-                              + "Reporting Stations                                  Date"));
+      outPanel.setBorder(new EtchedBorder());
       
       formatOutputArea();
-      outPanel.add(output);
+      outPanel.add(output.getTableHeader(), BorderLayout.PAGE_START);
+      outPanel.add(output, BorderLayout.CENTER);
       
       outPanel.setVisible(true);
       this.add(outPanel);
@@ -255,11 +256,9 @@ public class MesonetFrame extends JFrame
    
    public void formatOutputArea()
    {
-      output.setSize(950, 450);
-      output.setLineWrap(true);
-      output.setWrapStyleWord(true);
-      output.setVisible(true);
+      
      
+      output.setFillsViewportHeight(true);
    }
    
    public void formatButtons()

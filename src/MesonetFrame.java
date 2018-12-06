@@ -11,6 +11,8 @@ import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.EventObject;
@@ -25,20 +27,22 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 public class MesonetFrame extends JFrame
 {
+   
+   private static final long serialVersionUID = 1L;
+   
    JMenuBar menuBar = new JMenuBar();
    JMenu fileMenu = new JMenu("File");
    JMenuItem choosefile = new JMenuItem();
@@ -81,11 +85,13 @@ public class MesonetFrame extends JFrame
    JRadioButton AVERAGE = new JRadioButton("AVERAGE");
    JRadioButton TOTAL = new JRadioButton("TOTAL");
    
-   File file = null;
+   File file = new File("201808301745.mdf");
+   
    final String[] headers = {"Station", "Parameter", "Statistic", "Value", "Reporting Stations", "Date"};
-   final String[][] initdata = {{"123", "234", "123", "123", "123", "123"}};
-   JTable output = new JTable(initdata, headers);
-   JScrollPane scrollPane = new JScrollPane(output);
+   int numRows = 92 ;
+   JTable output;
+   
+   JScrollPane scrollPanel;
    
    JButton calc = new JButton("Calculate");
    JButton exit = new JButton("Exit");
@@ -200,8 +206,9 @@ public class MesonetFrame extends JFrame
       outPanel.setBorder(new EtchedBorder());
       
       formatOutputArea();
-      outPanel.add(output.getTableHeader(), BorderLayout.PAGE_START);
-      outPanel.add(output, BorderLayout.CENTER);
+      scrollPanel = new JScrollPane(output);
+      scrollPanel.setSize(1000, 400);
+      outPanel.add(scrollPanel);
       
       outPanel.setVisible(true);
       this.add(outPanel);
@@ -256,9 +263,22 @@ public class MesonetFrame extends JFrame
    
    public void formatOutputArea()
    {
+      DefaultTableModel blank = new DefaultTableModel(numRows, headers.length);
+      blank.setColumnIdentifiers(headers);
+      output = new JTable(blank);
+      output.setSize(950, 450);
       
-     
-      output.setFillsViewportHeight(true);
+      TableColumn column = null;
+      for (int i = 0; i < 5; i++) {
+          column = output.getColumnModel().getColumn(i);
+          if (i == 4 || i == 5) {
+              column.setPreferredWidth(250);
+          } else {
+              column.setPreferredWidth(150);
+          }
+      }
+      
+      
    }
    
    public void formatButtons()
@@ -296,10 +316,27 @@ public class MesonetFrame extends JFrame
    {
       public void actionPerformed(ActionEvent e)
       {
-      
+         
+         MapData data = new MapData(file.getName(), "data");
+         try
+         {
+            data.parseFile();
+         } catch (FileNotFoundException e1)
+         {
+            output.setValueAt("File Not Found", 0, 0);
+            e1.printStackTrace();
+         } catch (IOException e1)
+         {
+            output.setValueAt("Read Failed", 0, 0);
+            e1.printStackTrace();
+         } catch (NullPointerException e1)
+         {
+            output.setValueAt("No File Selected", 0, 0);
+            e1.printStackTrace();
+         }
+         
+         
+         
       }
    }
-   
 }
-
-

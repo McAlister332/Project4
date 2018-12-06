@@ -73,6 +73,24 @@ public class MapData
       paramPositions = new TreeMap<String, Integer>();
       
    }
+   
+   /**
+    * Constructor, initializes utcDateTime, fileName, dataCatalog, statistics, and paramPositions.
+    * 
+    * @param fileName The name of the file.
+    * @param directory The file location for the data.
+    */
+   public MapData(String fileName, String directory)
+   {
+      
+      utcDateTime = new GregorianCalendar(Integer.parseInt(fileName.substring(0, 3)), Integer.parseInt(fileName.substring(4, 5)),
+               Integer.parseInt(fileName.substring(6, 7)), Integer.parseInt(fileName.substring(8, 9)), Integer.parseInt(fileName.substring(10, 11)));
+      this.fileName = directory +"/" + fileName;
+      dataCatalog = new HashMap<String, ArrayList<Observation>>();
+      statistics = new EnumMap<StatsType, TreeMap<String, Statistics>>(StatsType.class);
+      paramPositions = new TreeMap<String, Integer>();
+      
+   }
     
    /**
     * Creates a file for a certain date and time.

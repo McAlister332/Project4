@@ -1,24 +1,11 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.EventObject;
-import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -33,10 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 
 public class MesonetFrame extends JFrame
 {
@@ -319,6 +304,12 @@ public class MesonetFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {
          
+         for(int r = 0; r < 92; ++r)
+         {
+            for(int c = 0; c < 6; ++c)
+               output.setValueAt("", r, c);
+         }
+         
          MapData data = new MapData(file.getName(), "data");
          try
          {
@@ -340,51 +331,51 @@ public class MesonetFrame extends JFrame
          ArrayList<String> paramTypes = new ArrayList<String>();
          ArrayList<StatsType> statTypes = new ArrayList<StatsType>();
          
-         if(stnm.isSelected());
+         if(stnm.isSelected())
             paramTypes.add("STNM");
-         if(time.isSelected());
+         if(time.isSelected())
             paramTypes.add("TIME");
-         if(relh.isSelected());
+         if(relh.isSelected())
             paramTypes.add("RELH");
-         if(tair.isSelected());
+         if(tair.isSelected())
             paramTypes.add("TAIR");
-         if(wspd.isSelected());
+         if(wspd.isSelected())
             paramTypes.add("WSPD");
-         if(wvec.isSelected());
+         if(wvec.isSelected())
             paramTypes.add("WVEC");
-         if(wdir.isSelected());
+         if(wdir.isSelected())
             paramTypes.add("WDIR");
-         if(wdsd.isSelected());
+         if(wdsd.isSelected())
             paramTypes.add("WDSD");
-         if(wssd.isSelected());
+         if(wssd.isSelected())
             paramTypes.add("WSSD");
-         if(wmax.isSelected());
+         if(wmax.isSelected())
             paramTypes.add("WMAX");
-         if(rain.isSelected());
+         if(rain.isSelected())
             paramTypes.add("RAIN");
-         if(pres.isSelected());
+         if(pres.isSelected())
             paramTypes.add("PRES");
-         if(srad.isSelected());
+         if(srad.isSelected())
             paramTypes.add("SRAD");
-         if(ta9m.isSelected());
+         if(ta9m.isSelected())
             paramTypes.add("TA9M");
-         if(ws2m.isSelected());
+         if(ws2m.isSelected())
             paramTypes.add("WS2M");
-         if(ts10.isSelected());
+         if(ts10.isSelected())
             paramTypes.add("TS10");
-         if(tb10.isSelected());
+         if(tb10.isSelected())
             paramTypes.add("TB10");
-         if(ts05.isSelected());
+         if(ts05.isSelected())
             paramTypes.add("TS05");
-         if(ts25.isSelected());
+         if(ts25.isSelected())
             paramTypes.add("TS25");
-         if(ts60.isSelected());
+         if(ts60.isSelected())
             paramTypes.add("TS60");
-         if(tr05.isSelected());
+         if(tr05.isSelected())
             paramTypes.add("TR05");
-         if(tr25.isSelected());
+         if(tr25.isSelected())
             paramTypes.add("TR25");
-         if(tr60.isSelected());
+         if(tr60.isSelected())
             paramTypes.add("TR60");
             
 
@@ -402,19 +393,39 @@ public class MesonetFrame extends JFrame
          int cntr = 0;
          for(StatsType t: statTypes)
          {
-            for(String s: paramTypes)
+            if(t != StatsType.TOTAL)
             {
-               Statistics temp = data.getStatistics(t, s);
-               output.setValueAt(temp.getStid(), cntr, 0);
-               output.setValueAt(s, cntr, 1);
-               output.setValueAt(t, cntr, 2);
-               output.setValueAt(temp.getValue(), cntr, 3);
-               output.setValueAt(temp.getNumberOfReportingStations(), cntr, 4);
-               output.setValueAt(temp.getUTCDateTimeString(), cntr, 5);
+               for(String s: paramTypes)
+               {
+                  Statistics temp = data.getStatistics(t, s);
+                  output.setValueAt(temp.getStid(), cntr, 0);
+                  output.setValueAt(s, cntr, 1);
+                  output.setValueAt(t, cntr, 2);
+                  output.setValueAt(String.format("%.02f", temp.getValue()), cntr, 3);
+                  output.setValueAt(temp.getNumberOfReportingStations(), cntr, 4);
+                  output.setValueAt(temp.getUTCDateTimeString(), cntr, 5);
+                  cntr++;
+               }
             }
-            
+            else
+            {
+               for(String s: paramTypes)
+               {
+                  if(s.equals("RAIN") || s.equals("SRAD"))
+                  {
+                     Statistics temp = data.getStatistics(t, s);
+                     output.setValueAt(temp.getStid(), cntr, 0);
+                     output.setValueAt(s, cntr, 1);
+                     output.setValueAt(t, cntr, 2);
+                     output.setValueAt(String.format("%.02f", temp.getValue()), cntr, 3);
+                     output.setValueAt(temp.getNumberOfReportingStations(), cntr, 4);
+                     output.setValueAt(temp.getUTCDateTimeString(), cntr, 5);
+                     cntr++;
+                  }
+               }
+            }
          }
-         
       }
    }
+   
 }

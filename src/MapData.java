@@ -269,10 +269,10 @@ public class MapData
        
       if (invCntr >= NUMBER_OF_MISSING_OBSERVATIONS)
       {
-         Statistics[] paramStats = {new Statistics(0.0, "Invalid " + STID, utcDateTime, 0, StatsType.MAXIMUM),
-                  new Statistics(0.0, "Invalid " + STID, utcDateTime, 0, StatsType.MINIMUM),
-                  new Statistics(0.0, "Invalid " + STID, utcDateTime, 0, StatsType.AVERAGE),
-                  new Statistics(0.0, "Invalid " + STID, utcDateTime, 0, StatsType.TOTAL)};
+         Statistics[] paramStats = {new Statistics(0.0, "Invalid Data or " + STID, utcDateTime, 0, StatsType.MAXIMUM),
+                  new Statistics(0.0, "Invalid Data or " + STID, utcDateTime, 0, StatsType.MINIMUM),
+                  new Statistics(0.0, "Invalid Data or " + STID, utcDateTime, 0, StatsType.AVERAGE),
+                  new Statistics(0.0, "Invalid Data or " + STID, utcDateTime, 0, StatsType.TOTAL)};
          return paramStats;
       }
       else

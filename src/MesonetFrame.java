@@ -203,11 +203,12 @@ public class MesonetFrame extends JFrame
    {
       outPanel.setLocation(450, 100);
       outPanel.setSize(1000, 450);
+      outPanel.setLayout(null);
       outPanel.setBorder(new EtchedBorder());
       
       formatOutputArea();
       scrollPanel = new JScrollPane(output);
-      scrollPanel.setSize(1000, 400);
+      scrollPanel.setSize(1000, 450);
       outPanel.add(scrollPanel);
       
       outPanel.setVisible(true);
@@ -266,13 +267,14 @@ public class MesonetFrame extends JFrame
       DefaultTableModel blank = new DefaultTableModel(numRows, headers.length);
       blank.setColumnIdentifiers(headers);
       output = new JTable(blank);
-      output.setSize(950, 450);
+      output.setAutoResizeMode(output.AUTO_RESIZE_OFF);
+      output.setSize(1000, 450);
       
       TableColumn column = null;
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 6; i++) {
           column = output.getColumnModel().getColumn(i);
           if (i == 4 || i == 5) {
-              column.setPreferredWidth(250);
+              column.setPreferredWidth(200);
           } else {
               column.setPreferredWidth(150);
           }
@@ -335,7 +337,83 @@ public class MesonetFrame extends JFrame
             e1.printStackTrace();
          }
          
+         ArrayList<String> paramTypes = new ArrayList<String>();
+         ArrayList<StatsType> statTypes = new ArrayList<StatsType>();
          
+         if(stnm.isSelected());
+            paramTypes.add("STNM");
+         if(time.isSelected());
+            paramTypes.add("TIME");
+         if(relh.isSelected());
+            paramTypes.add("RELH");
+         if(tair.isSelected());
+            paramTypes.add("TAIR");
+         if(wspd.isSelected());
+            paramTypes.add("WSPD");
+         if(wvec.isSelected());
+            paramTypes.add("WVEC");
+         if(wdir.isSelected());
+            paramTypes.add("WDIR");
+         if(wdsd.isSelected());
+            paramTypes.add("WDSD");
+         if(wssd.isSelected());
+            paramTypes.add("WSSD");
+         if(wmax.isSelected());
+            paramTypes.add("WMAX");
+         if(rain.isSelected());
+            paramTypes.add("RAIN");
+         if(pres.isSelected());
+            paramTypes.add("PRES");
+         if(srad.isSelected());
+            paramTypes.add("SRAD");
+         if(ta9m.isSelected());
+            paramTypes.add("TA9M");
+         if(ws2m.isSelected());
+            paramTypes.add("WS2M");
+         if(ts10.isSelected());
+            paramTypes.add("TS10");
+         if(tb10.isSelected());
+            paramTypes.add("TB10");
+         if(ts05.isSelected());
+            paramTypes.add("TS05");
+         if(ts25.isSelected());
+            paramTypes.add("TS25");
+         if(ts60.isSelected());
+            paramTypes.add("TS60");
+         if(tr05.isSelected());
+            paramTypes.add("TR05");
+         if(tr25.isSelected());
+            paramTypes.add("TR25");
+         if(tr60.isSelected());
+            paramTypes.add("TR60");
+            
+
+         if(MAXIMUM.isSelected())
+            statTypes.add(StatsType.MAXIMUM);
+         if(MINIMUM.isSelected())
+            statTypes.add(StatsType.MINIMUM);
+         if(AVERAGE.isSelected())
+            statTypes.add(StatsType.AVERAGE);
+         if(TOTAL.isSelected())
+            statTypes.add(StatsType.TOTAL);
+         
+         //System.out.println(data.getStatistics(StatsType.MAXIMUM, "TA9M").toString());
+         
+         int cntr = 0;
+         for(StatsType t: statTypes)
+         {
+            for(String s: paramTypes)
+            {
+               Statistics temp = data.getStatistics(t, s);
+               output.setValueAt(temp.getStid(), cntr, 0);
+               output.setValueAt(s, cntr, 1);
+               output.setValueAt(t, cntr, 2);
+               output.setValueAt(temp.getValue(), cntr, 3);
+               output.setValueAt(temp.getNumberOfReportingStations(), cntr, 4);
+               output.setValueAt(temp.getUTCDateTimeString(), cntr, 5);
+            }
+            
+         }
          
       }
    }

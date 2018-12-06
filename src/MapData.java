@@ -83,8 +83,8 @@ public class MapData
    public MapData(String fileName, String directory)
    {
       
-      utcDateTime = new GregorianCalendar(Integer.parseInt(fileName.substring(0, 3)), Integer.parseInt(fileName.substring(4, 5)),
-               Integer.parseInt(fileName.substring(6, 7)), Integer.parseInt(fileName.substring(8, 9)), Integer.parseInt(fileName.substring(10, 11)));
+      utcDateTime = new GregorianCalendar(Integer.parseInt(fileName.substring(0, 4)), Integer.parseInt(fileName.substring(4, 6)),
+               Integer.parseInt(fileName.substring(6, 8)), Integer.parseInt(fileName.substring(8, 10)), Integer.parseInt(fileName.substring(10, 12)));
       this.fileName = directory +"/" + fileName;
       dataCatalog = new HashMap<String, ArrayList<Observation>>();
       statistics = new EnumMap<StatsType, TreeMap<String, Statistics>>(StatsType.class);

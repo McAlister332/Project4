@@ -30,18 +30,26 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
 public class MesonetFrame extends JFrame
 {
+   JMenuBar menuBar = new JMenuBar();
+   JMenu fileMenu = new JMenu("File");
+   JMenuItem file1 = new JMenuItem();
+   JMenuItem file2 = new JMenuItem();
    
    JPanel textPanel = new JPanel();
    JPanel paramPanel = new JPanel();
    JPanel statsPanel = new JPanel();
    JPanel outPanel = new JPanel();
    JPanel buttonPanel = new JPanel();
+   
+   JLabel messageArea = new JLabel();
    
    JCheckBox stnm = new JCheckBox();
    JCheckBox time = new JCheckBox();
@@ -72,14 +80,10 @@ public class MesonetFrame extends JFrame
    JRadioButton AVERAGE = new JRadioButton("AVERAGE");
    JRadioButton TOTAL = new JRadioButton("TOTAL");
    
+   JTextArea output = new JTextArea();
    
-   JMenuBar menuBar = new JMenuBar();
-   JMenu fileMenu = new JMenu("File");
-   JMenuItem file1 = new JMenuItem();
-   JMenuItem file2 = new JMenuItem();
-   
-   
-   
+   JButton calc = new JButton("Calculate");
+   JButton exit = new JButton("Exit");
    
    public MesonetFrame()
    {
@@ -92,29 +96,44 @@ public class MesonetFrame extends JFrame
       
       
       
+      
+      this.formatMenuBar();
+      this.formatTextPanel();
+      this.formatParamPanel();
+      this.formatStatsPanel();
+      this.formatButtonPanel();
+      
+      this.setVisible(true);
+   }
+   
+   public void formatMenuBar()
+   {
       file1.setText("201808010700.mdf");
       file2.setText("201808301745.mdf");
       fileMenu.add(file1);
       fileMenu.add(file2);
       menuBar.add(fileMenu);
-      
-      
-      
       this.setJMenuBar(menuBar);
-      menuBar.setVisible(true);
+   }
+   
+   public void formatTextPanel()
+   {
+      messageArea.setText("Mesonet - We don't set records, we report them!");
+      textPanel.setLocation(500, 0);
+      textPanel.setSize(500, 50);
       
-      
-      this.formatParamPanel();
-      this.formatStatsPanel();
-      
-      this.setVisible(true);
+      textPanel.setLayout(new GridLayout(1, 1));
+      textPanel.add(messageArea);
+      this.add(textPanel);
    }
    
    public void formatParamPanel()
    {
       paramPanel.setLocation(0, 50);
-      paramPanel.setSize(150, 950);
+      paramPanel.setSize(150, 625);
       paramPanel.setLayout(new GridLayout(20, 2));
+      paramPanel.setBorder(new EtchedBorder());
+      
       
       formatCheckBoxes();
       paramPanel.add(stnm);
@@ -151,10 +170,11 @@ public class MesonetFrame extends JFrame
    public void formatStatsPanel()
    {
       statsPanel.setLocation(200, 50);
-      statsPanel.setSize(200, 750);
-      statsPanel.setLayout(new GridLayout(5, 1));
+      statsPanel.setSize(200, 625);
+      statsPanel.setLayout(new GridLayout(4, 1));
+      statsPanel.setBorder(new EtchedBorder());
       
-      
+      formatRadioButtons();
       statsPanel.add(MAXIMUM);
       statsPanel.add(MINIMUM);
       statsPanel.add(AVERAGE);
@@ -162,6 +182,25 @@ public class MesonetFrame extends JFrame
       
       statsPanel.setVisible(true);
       this.add(statsPanel);
+      
+   }
+   
+   public void formatButtonPanel()
+   {
+      buttonPanel.setLocation(500, 550);
+      buttonPanel.setSize(500, 100);
+      buttonPanel.setLayout(new GridLayout(1, 0));
+      
+      buttonPanel.add(calc);
+      buttonPanel.add(exit);
+      
+      buttonPanel.setVisible(true);
+      this.add(buttonPanel);
+      
+   }
+   
+   public void formatRadioButtons()
+   {
       
    }
    

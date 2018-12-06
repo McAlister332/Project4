@@ -38,7 +38,7 @@ public class MesonetFrame extends JFrame
 {
    
    JPanel textPanel = new JPanel();
-   JScrollPane paramPanel = new JScrollPane();
+   JPanel paramPanel = new JPanel();
    JPanel statsPanel = new JPanel();
    JPanel outPanel = new JPanel();
    JPanel buttonPanel = new JPanel();
@@ -67,9 +67,14 @@ public class MesonetFrame extends JFrame
    JCheckBox tr25 = new JCheckBox();
    JCheckBox tr60 = new JCheckBox();
    
+   JRadioButton MAXIMUM = new JRadioButton("MAXIMUM");
+   JRadioButton MINIMUM = new JRadioButton("MINIMUM");
+   JRadioButton AVERAGE = new JRadioButton("AVERAGE");
+   JRadioButton TOTAL = new JRadioButton("TOTAL");
+   
    
    JMenuBar menuBar = new JMenuBar();
-   JMenu fileMenu = new JMenu();
+   JMenu fileMenu = new JMenu("File");
    JMenuItem file1 = new JMenuItem();
    JMenuItem file2 = new JMenuItem();
    
@@ -79,38 +84,39 @@ public class MesonetFrame extends JFrame
    public MesonetFrame()
    {
       super("Mesonet WeatherStatistics Calculator");
+      this.setLayout(null);
+      this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       this.setSize(1500, 750);
       this.setResizable(false);
       
       
       
       
-      file1.setText("First file");
-      file2.setText("Second file");
+      file1.setText("201808010700.mdf");
+      file2.setText("201808301745.mdf");
       fileMenu.add(file1);
       fileMenu.add(file2);
       menuBar.add(fileMenu);
-      menuBar.setName("File");
       
       
       
       this.setJMenuBar(menuBar);
       menuBar.setVisible(true);
-      this.setDefaultCloseOperation(EXIT_ON_CLOSE);
       
-      setupParamPanel();
-      //setupStatsPanel();
+      
+      this.formatParamPanel();
+      this.formatStatsPanel();
       
       this.setVisible(true);
    }
    
-   public void setupParamPanel()
+   public void formatParamPanel()
    {
       paramPanel.setLocation(0, 50);
-      paramPanel.setSize(200, 950);
-      paramPanel.setVisible(true);
+      paramPanel.setSize(150, 950);
+      paramPanel.setLayout(new GridLayout(20, 2));
       
-      setupCheckBoxes();
+      formatCheckBoxes();
       paramPanel.add(stnm);
       paramPanel.add(time);
       paramPanel.add(relh);
@@ -135,25 +141,31 @@ public class MesonetFrame extends JFrame
       paramPanel.add(tr25);
       paramPanel.add(tr60);
       
-      
+
+      paramPanel.setVisible(true);
       this.add(paramPanel);
       
       
    }
    
-   public void setupStatsPanel()
+   public void formatStatsPanel()
    {
       statsPanel.setLocation(200, 50);
-      statsPanel.setSize(200, 950);
+      statsPanel.setSize(200, 750);
+      statsPanel.setLayout(new GridLayout(5, 1));
       
       
+      statsPanel.add(MAXIMUM);
+      statsPanel.add(MINIMUM);
+      statsPanel.add(AVERAGE);
+      statsPanel.add(TOTAL);
       
       statsPanel.setVisible(true);
       this.add(statsPanel);
       
    }
    
-   public void setupCheckBoxes()
+   public void formatCheckBoxes()
    {
       stnm.setText("STNM");
       time.setText("TIME");
